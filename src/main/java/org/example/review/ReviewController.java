@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/reviews")
 public class ReviewController {
 
@@ -22,6 +21,27 @@ public class ReviewController {
         return reviewService.getAllReviews();
     }
 
+    // New API endpoint - search and filter reviews
+    @GetMapping("/filtered")
+    public ResponseEntity<List<Review>> getFilteredReviews(
+            @RequestParam(required = false, defaultValue = "") String searchTerm,
+            @RequestParam(required = false, defaultValue = "") String category) {
+
+        List<Review> filteredReviews = reviewService.filterReviews(searchTerm, category);
+        return ResponseEntity.ok(filteredReviews); // <-- always return array
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<Review>> getFilterReviewsByCategory(
+            @RequestParam(value = "category", required = false) String category) {
+        List<Review> reviews;
+        if (category != null && !category.isEmpty()) {
+            reviews = reviewService.filterReviewsByCategory(category);  // กรองตามหมวดหมู่
+        } else {
+            reviews = reviewService.getAllReviews();  // ถ้าไม่มี category ให้ดึงรีวิวทั้งหมด
+        }
+        return ResponseEntity.ok(reviews);
+    }
 
     // ฟังก์ชัน POST สำหรับเพิ่มรีวิว
     @PostMapping("/addreview")

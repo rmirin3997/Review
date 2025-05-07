@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -13,6 +14,26 @@ public class ReviewService {
 
     public List<Review> getAllReviews() {
         return reviewRepository.findAll();
+    }
+
+    // Search and filter reviews
+    public List<Review> filterReviews(String searchTerm, String category) {
+        // If no search term or category is provided, return all reviews
+        if ((searchTerm == null || searchTerm.isEmpty()) &&
+                (category == null || category.isEmpty())) {
+            return reviewRepository.findAll();
+        }
+
+        // Use custom query with search parameters
+        return reviewRepository.findBySearchTermAndCategory(searchTerm, category);
+    }
+
+    // ฟังก์ชันกรองรีวิวตามหมวดหมู่
+    public List<Review> filterReviewsByCategory(String category) {
+        if (category == null || category.isEmpty()) {
+            return reviewRepository.findAll();  // หากไม่มีหมวดหมู่, ส่งคืนรีวิวทั้งหมด
+        }
+        return reviewRepository.findByCategory(category);  // ส่งคืนรีวิวที่กรองตามหมวดหมู่
     }
 
     public boolean checkInappropriateContent(String title, String description) {

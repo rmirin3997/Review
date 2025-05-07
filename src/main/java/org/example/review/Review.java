@@ -22,6 +22,15 @@ public class Review {
     private String userAgent;
     private Date createdAt;
 
+
+    public Review(String title, String description, String category, String author, int rating) {
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.author = author;
+        this.rating = rating;
+    }
+
     public ObjectId getId() {
         return id;
     }
@@ -109,7 +118,6 @@ public class Review {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-
 
     @Override
     public String toString() {
