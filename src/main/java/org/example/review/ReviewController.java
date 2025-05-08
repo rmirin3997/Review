@@ -10,18 +10,21 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/reviews")
+@CrossOrigin(origins = "http://localhost:3000")//
 public class ReviewController {
 
     @Autowired
     private ReviewService reviewService;
 
     // ฟังก์ชัน GET สำหรับดึงข้อมูลรีวิว
+    @CrossOrigin
     @GetMapping("/all_review")
     public List<Review> getReviews() {
         return reviewService.getAllReviews();
     }
 
     // New API endpoint - search and filter reviews
+    @CrossOrigin
     @GetMapping("/filtered")
     public ResponseEntity<List<Review>> getFilteredReviews(
             @RequestParam(required = false, defaultValue = "") String searchTerm,
@@ -30,7 +33,7 @@ public class ReviewController {
         List<Review> filteredReviews = reviewService.filterReviews(searchTerm, category);
         return ResponseEntity.ok(filteredReviews); // <-- always return array
     }
-
+    @CrossOrigin
     @GetMapping("/categories")
     public ResponseEntity<List<Review>> getFilterReviewsByCategory(
             @RequestParam(value = "category", required = false) String category) {
@@ -44,6 +47,7 @@ public class ReviewController {
     }
 
     // ฟังก์ชัน POST สำหรับเพิ่มรีวิว
+    @CrossOrigin
     @PostMapping("/addreview")
     public ResponseEntity<?> addReview(@RequestBody Review review, HttpServletRequest request) {
         // ดึง IP และ User-Agent
